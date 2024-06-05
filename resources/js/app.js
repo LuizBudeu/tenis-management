@@ -11,6 +11,7 @@ import "vuetify/styles";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import '@mdi/font/css/materialdesignicons.css'
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -20,7 +21,7 @@ const vuetify = createVuetify({
 });
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title}`,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.vue`,
