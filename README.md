@@ -53,4 +53,4 @@ A web app to dynamically manage usage of multiple tennis courts.
 
 ---
 
-Access the web app in `http://localhost`
+Access the web app in `http://localhost:8000`
