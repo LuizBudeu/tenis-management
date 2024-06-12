@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TennisCourtStatus;
+use App\Enums\TennisCourtType;
 use App\Exceptions\TennisCourtNotFoundException;
 use App\Http\Requests\CreateTennisCourtRequest;
 use App\Http\Requests\UpdateTennisCourtRequest;
@@ -25,7 +27,9 @@ class TennisCourtController extends Controller
     {
         $tennisCourts = TennisCourt::select('court_number', 'court_type', 'status')->get();
         return Inertia::render('TennisCourt/Control', [
-            'tennisCourts' => $tennisCourts
+            'tennisCourts' => $tennisCourts,
+            'tennisCourtTypes' => TennisCourtType::toArray(),
+            'tennisCourtStatus' => TennisCourtStatus::toArray(),
         ]);
     }
 

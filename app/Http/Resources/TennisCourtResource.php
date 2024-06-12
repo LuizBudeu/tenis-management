@@ -18,8 +18,8 @@ class TennisCourtResource extends JsonResource
     {
         return [
             'court_number' => $this->court_number,
-            'court_type' => $this->court_type ?? TennisCourtType::getDefaultValue(),
-            'status' => $this->status ?? TennisCourtStatus::getDefaultValue()
+            'court_type' => empty($this->court_type) ? TennisCourtType::getDefaultValue() : $this->court_type,
+            'status' => empty($this->status) ? TennisCourtStatus::getDefaultValue() : $this->status,
         ];
     }
 }

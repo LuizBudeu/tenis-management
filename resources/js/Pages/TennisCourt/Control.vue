@@ -2,9 +2,20 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { defineProps, ref, computed, watch } from 'vue';
+import { addTennisCourt, editTennisCourt, deleteTennisCourt } from './api';
 
 const props = defineProps({
-    tennisCourts: Array
+    tennisCourts: Array,
+    tennisCourtTypes: Array,
+    tennisCourtStatus: Array
+})
+
+props.tennisCourtTypes = props.tennisCourtTypes.map((type) => {
+    return { title: type, value: type }
+})
+
+props.tennisCourtStatus = props.tennisCourtStatus.map((status) => {
+    return { title: status, value: status }
 })
 
 const headers = ref([
@@ -19,8 +30,8 @@ const dialogDelete = ref(false)
 const editedIndex = ref(-1)
 const editedItem = ref({
     court_number: '',
-    court_type: '',
-    status: ''
+    court_type: 'Saibro',
+    status: 'Disponivel'
 })
 const defaultItem = ref({
     court_number: '',
@@ -40,10 +51,16 @@ const deleteItem = (item) => {
     dialogDelete.value = true
 }
 
-const deleteItemConfirm = () => {
-    props.tennisCourts.splice(editedIndex.value, 1)
-    closeDelete()
-}
+
+const deleteItemConfirm = async () => {
+    try {
+        await deleteTennisCourt(editedItem.value.court_number);
+        props.tennisCourts.splice(editedIndex.value, 1);
+        closeDelete();
+    } catch (error) {
+        console.error('Error deleting tennis court:', error);
+    }
+};
 
 const close = () => {
     dialog.value = false
@@ -57,14 +74,20 @@ const closeDelete = () => {
     editedIndex.value = -1
 }
 
-const save = () => {
-    if (editedIndex.value > -1) {
-        Object.assign(props.tennisCourts[editedIndex.value], editedItem.value)
-    } else {
-        props.tennisCourts.push(editedItem.value)
+const save = async () => {
+    try {
+        if (editedIndex.value > -1) {  // Edit
+            await editTennisCourt(editedItem.value.court_number, editedItem.value);
+            props.tennisCourts[editedIndex.value] = editedItem.value;
+        } else {  // Add
+            const response = await addTennisCourt(editedItem.value);
+            props.tennisCourts.push(editedItem.value)
+        }
+        close();
+    } catch (error) {
+        console.error('Error saving tennis court:', error);
     }
-    close()
-}
+};
 
 const formTitle = computed(() => {
     return editedIndex.value === -1 ? 'Nova quadra' : 'Editar quadra'
@@ -118,19 +141,26 @@ watch(dialogDelete, (val) => {
                                                         <v-text-field
                                                             v-model="editedItem.court_number"
                                                             label="Número"
+                                                            type="number"
                                                         ></v-text-field>
                                                     </v-col>
                                                     <v-col cols="12" md="4" sm="6">
-                                                        <v-text-field
+                                                        <v-select
                                                             v-model="editedItem.court_type"
                                                             label="Tipo"
-                                                        ></v-text-field>
+                                                            :items="props.tennisCourtTypes"
+                                                            item-title="title"
+                                                            item-value="value"
+                                                        ></v-select>
                                                     </v-col>
                                                     <v-col cols="12" md="4" sm="6">
-                                                        <v-text-field
+                                                        <v-select
                                                             v-model="editedItem.status"
                                                             label="Status"
-                                                        ></v-text-field>
+                                                            :items="props.tennisCourtStatus"
+                                                            item-title="title"
+                                                            item-value="value"
+                                                        ></v-select>
                                                     </v-col>
                                                 </v-row>
                                             </v-container>
