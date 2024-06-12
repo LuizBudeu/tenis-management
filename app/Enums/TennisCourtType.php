@@ -12,4 +12,9 @@ enum TennisCourtType: string
     {
         return array_map(fn($type) => $type->value, self::cases());
     }
+
+    public static function getDefaultValue(): string
+    {
+        return self::Saibro->value;
+    }
 }

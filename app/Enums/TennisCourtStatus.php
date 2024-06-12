@@ -15,4 +15,9 @@ enum TennisCourtStatus: string
     {
         return array_map(fn($status) => $status->value, self::cases());
     }
+
+    public static function getDefaultValue(): string
+    {
+        return self::Disponivel->value;
+    }
 }

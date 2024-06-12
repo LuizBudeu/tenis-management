@@ -32,10 +32,10 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('tennisCourts.index')" :active="route().current('tennisCourts.index')">
+                                <NavLink :href="route('tennisCourts.indexInertia')" :active="route().current('tennisCourts.indexInertia')">
                                     Quadras
                                 </NavLink>
-                                <NavLink :href="route('tennisCourts.control')" :active="route().current('tennisCourts.control')">
+                                <NavLink :href="route('tennisCourts.controlInertia')" :active="route().current('tennisCourts.controlInertia')">
                                     Controle
                                 </NavLink>
                             </div>
@@ -121,8 +121,11 @@ const showingNavigationDropdown = ref(false);
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('tennisCourts.index')" :active="route().current('tennisCourts.*')">
+                        <ResponsiveNavLink :href="route('tennisCourts.indexInertia')" :active="route().current('tennisCourts.indexInertia')">
                             Quadras
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('tennisCourts.controlInertia')" :active="route().current('tennisCourts.controlInertia')">
+                            Controle
                         </ResponsiveNavLink>
                     </div>
 

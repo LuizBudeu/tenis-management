@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('tennis_courts', function (Blueprint $table) {
             $table->id();
             $table->integer('court_number');
-            $table->enum('court_type', TennisCourtType::toArray())->default(TennisCourtType::Saibro->value);
-            $table->enum('status', TennisCourtStatus::toArray())->default(TennisCourtStatus::Disponivel->value);
+            $table->enum('court_type', TennisCourtType::toArray())->default(TennisCourtType::getDefaultValue());
+            $table->enum('status', TennisCourtStatus::toArray())->default(TennisCourtStatus::getDefaultValue());
             $table->timestamps();
         });
     }

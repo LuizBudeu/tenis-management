@@ -29,8 +29,8 @@ Route::middleware('auth')->group(function () {
 });
 
 // Tennis
-Route::get('/tennis-courts', [TennisCourtController::class, 'index'])->name('tennisCourts.index');
-Route::get('/tennis-courts/control', [TennisCourtController::class, 'control'])->name('tennisCourts.control');
+Route::get('/tennis-courts', [TennisCourtController::class, 'indexInertia'])->name('tennisCourts.indexInertia');
+Route::get('/tennis-courts/control', [TennisCourtController::class, 'controlInertia'])->name('tennisCourts.controlInertia');
 
 
 require __DIR__.'/auth.php';
