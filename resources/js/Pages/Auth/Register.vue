@@ -13,10 +13,20 @@ const form = useForm({
     password_confirmation: '',
 });
 
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+const submit = async () => {
+    try {
+        const response = await axios.post(route('register'), form.data());
+        localStorage.setItem('auth_token', response.data.access_token);
+        form.reset('password', 'password_confirmation');
+        // Redirect to dashboard
+        window.location.href = '/dashboard';
+    } catch (error) {
+        if (error.response && error.response.data.errors) {
+            form.setError(error.response.data.errors);
+        } else {
+            console.error('An error occurred:', error);
+        }
+    }
 };
 </script>
 

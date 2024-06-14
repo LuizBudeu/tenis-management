@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\TennisCourt;
 
 use App\Enums\TennisCourtStatus;
 use App\Enums\TennisCourtType;

@@ -1,13 +1,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, usePage} from '@inertiajs/vue3';
 import { defineProps, ref, computed, watch } from 'vue';
 import { addTennisCourt, editTennisCourt, deleteTennisCourt } from './api';
 
 const props = defineProps({
     tennisCourts: Array,
     tennisCourtTypes: Array,
-    tennisCourtStatus: Array
+    tennisCourtStatus: Array,
+    // auth: Object
 })
 
 props.tennisCourtTypes = props.tennisCourtTypes.map((type) => {
@@ -39,6 +40,10 @@ const defaultItem = ref({
     status: ''
 });
 
+const showSnackbar = ref(false);
+let snackbarText = '';
+const snackbarTimeout = 3000;
+
 const editItem = (item) => {
     editedIndex.value = props.tennisCourts.indexOf(item)
     editedItem.value = Object.assign({}, item)
@@ -51,14 +56,14 @@ const deleteItem = (item) => {
     dialogDelete.value = true
 }
 
-
 const deleteItemConfirm = async () => {
     try {
         await deleteTennisCourt(editedItem.value.court_number);
         props.tennisCourts.splice(editedIndex.value, 1);
         closeDelete();
     } catch (error) {
-        console.error('Error deleting tennis court:', error);
+        showSnackbar.value = true;
+        snackbarText = error.message;
     }
 };
 
@@ -85,7 +90,8 @@ const save = async () => {
         }
         close();
     } catch (error) {
-        console.error('Error saving tennis court:', error);
+        showSnackbar.value = true;
+        snackbarText = error.message;
     }
 };
 
@@ -123,7 +129,7 @@ watch(dialogDelete, (val) => {
                                 <v-toolbar-title>Quadras</v-toolbar-title>
                                 <v-divider class="mx-4" inset vertical></v-divider>
                                 <v-spacer></v-spacer>
-                                <v-dialog v-model="dialog" max-width="500px">
+                                <v-dialog v-model="dialog" max-width="700px">
                                     <template v-slot:activator="{ props }">
                                         <v-btn class="mb-2" color="primary" dark v-bind="props">
                                             Nova quadra
@@ -177,7 +183,7 @@ watch(dialogDelete, (val) => {
                                         </v-card-actions>
                                     </v-card>
                                 </v-dialog>
-                                <v-dialog v-model="dialogDelete" max-width="500px">
+                                <v-dialog v-model="dialogDelete" max-width="700px">
                                     <v-card>
                                         <v-card-title class="text-h5"
                                         >Are you sure you want to delete this item?</v-card-title
@@ -206,6 +212,22 @@ watch(dialogDelete, (val) => {
                             <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
                         </template>
                     </v-data-table>
+                    <v-snackbar
+                        v-model="showSnackbar"
+                        :timeout="snackbarTimeout"
+                    >
+                        {{ snackbarText }}
+
+                        <template v-slot:actions>
+                            <v-btn
+                                color="pink"
+                                variant="text"
+                                @click="showSnackbar = false"
+                            >
+                                Close
+                            </v-btn>
+                        </template>
+                    </v-snackbar>
                 </div>
             </div>
         </div>

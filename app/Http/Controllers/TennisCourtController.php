@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Enums\TennisCourtStatus;
 use App\Enums\TennisCourtType;
 use App\Exceptions\TennisCourtNotFoundException;
-use App\Http\Requests\CreateTennisCourtRequest;
-use App\Http\Requests\UpdateTennisCourtRequest;
+use App\Http\Requests\TennisCourt\CreateTennisCourtRequest;
+use App\Http\Requests\TennisCourt\UpdateTennisCourtRequest;
 use App\Http\Resources\TennisCourtResource;
 use App\Models\TennisCourt;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class TennisCourtController extends Controller
-{
+class TennisCourtController extends Controller {
+    use AuthorizesRequests;
+
     // Inertia Routes
     public function indexInertia()
     {
@@ -47,6 +49,7 @@ class TennisCourtController extends Controller
      */
     public function store(CreateTennisCourtRequest $request)
     {
+        $this->authorize('create', TennisCourt::class);
         $tennisCourt = TennisCourt::create($request->validated());
         return TennisCourtResource::make($tennisCourt);
     }
@@ -71,6 +74,7 @@ class TennisCourtController extends Controller
     {
         try {
             $tennisCourt = TennisCourt::where('court_number', $tennisCourtNumber)->firstOrFail();
+            $this->authorize('update', $tennisCourt);
             $tennisCourt->update($request->validated());
             return TennisCourtResource::make($tennisCourt);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -85,6 +89,7 @@ class TennisCourtController extends Controller
     {
         try {
             $tennisCourt = TennisCourt::where('court_number', $tennisCourtNumber)->firstOrFail();
+            $this->authorize('delete', $tennisCourt);
             $tennisCourt->delete();
             return response()->json(['message' => 'Tennis court deleted successfully.'], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
