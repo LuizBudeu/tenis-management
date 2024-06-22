@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, usePage} from '@inertiajs/vue3';
+import {Head} from '@inertiajs/vue3';
 import { defineProps, ref, computed, watch } from 'vue';
 import { addTennisCourt, editTennisCourt, deleteTennisCourt } from './api';
 
@@ -8,7 +8,6 @@ const props = defineProps({
     tennisCourts: Array,
     tennisCourtTypes: Array,
     tennisCourtStatus: Array,
-    // auth: Object
 })
 
 props.tennisCourtTypes = props.tennisCourtTypes.map((type) => {
@@ -205,6 +204,7 @@ watch(dialogDelete, (val) => {
                                 </v-dialog>
                             </v-toolbar>
                         </template>
+
                         <template v-slot:item.actions="{ item }">
                             <v-icon class="me-2" size="small" @click="editItem(item)">
                                 mdi-pencil
@@ -212,6 +212,7 @@ watch(dialogDelete, (val) => {
                             <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
                         </template>
                     </v-data-table>
+
                     <v-snackbar
                         v-model="showSnackbar"
                         :timeout="snackbarTimeout"

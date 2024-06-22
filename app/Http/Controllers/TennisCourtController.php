@@ -20,7 +20,7 @@ class TennisCourtController extends Controller {
     public function indexInertia()
     {
         $tennisCourts = TennisCourt::select('court_number', 'court_type', 'status')->get();
-        return Inertia::render('TennisCourt/All', [
+        return Inertia::render('TennisCourt/View', [
             'tennisCourts' => $tennisCourts
         ]);
     }
